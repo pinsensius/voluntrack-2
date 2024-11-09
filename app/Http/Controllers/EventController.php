@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Relawan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -72,7 +73,9 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        return view('event.show', compact('event'));   
+        // session(['event_id' => $event->id_event]);
+        $relawans = Relawan::where('event_id', $event->id_event)->latest()->get();
+        return view('event.show', compact('event', 'relawans'));   
     }
 
     /**

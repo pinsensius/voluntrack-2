@@ -31,9 +31,18 @@
                         {!! $event->requirement !!}
                         <hr/>
                         <p>Lokasi : {{ $event->lokasi }}</p>
+
+                        <p>Relawan</p>
+                        <ol>
+                        @foreach ($relawans as $relawan )
+                            <li>{{$relawan->nama_lengkap}}</li>                            
+                        @endforeach
+                        </ol>
                     </div>
                 </div>
             </div>
+            <p>{{$event->id_event}}</p>
+            <a href="{{route('relawan.daftar', ['event' => $event->id_event])}}">daftar relawan</a>
         </div>
     </div>
 
