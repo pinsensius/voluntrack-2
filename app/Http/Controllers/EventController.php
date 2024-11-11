@@ -36,7 +36,8 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'event_image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'event_image' => 'required',
+            'event_image.*' => 'image|mimes:jpeg,jpg,png|max:2048',
             'host' => 'required|exists:users,id',
             'nama' => 'required|min:5|regex:/^[A-Za-z0-9\s]+$/|string',
             'tags' => 'required|in:lingkungan,kemanusiaan,olahraga|string',
@@ -48,12 +49,16 @@ class EventController extends Controller
             'target_donasi' => 'required|numeric'
         ]);
 
+        $imagePath = [];
+
         if( $request->hasFile('event_image')){
-            $imagePath = $request->file('event_image')->store('event', 'public');
+            foreach($request->file('event_image') as $image){
+                $imagePath[] = $image->store('event', 'public');
+            }
         }
 
         Event::create([
-            'event_image' => $imagePath,
+            'event_image' => json_encode($imagePath),
             'host' => $request->host,
             'nama' => $request->nama,
             'tags' => $request->tags,
@@ -93,7 +98,8 @@ class EventController extends Controller
     public function update(Request $request, Event $event): RedirectResponse
     {
         $request->validate([
-            'event_image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'event_image' => 'required',
+            'event_image.*' => 'image|mimes:jpeg,jpg,png|max:2048',
             'nama' => 'required|min:5|regex:/^[A-Za-z0-9\s]+$/|string',
             'tags' => 'required|in:lingkungan,kemanusiaan,olahraga|string',
             'tanggal_mulai' => 'required|date|after:today',
@@ -104,18 +110,26 @@ class EventController extends Controller
             'target_donasi' => 'required|numeric'
         ]);
 
-        if($request->hasFile('event_image')){
-            $imagePath = $request->file('event_image')->store('event', 'public');
+        
 
-            $data = $event;
-            $dataPath = $data->event_image;
+        if($request->hasFile('event_image')){
+
+            $imagePath = [];
+
+            if( $request->hasFile('event_image')){
+                foreach($request->file('event_image') as $image){
+                    $imagePath[] = $image->store('event', 'public');
+                }
+            }
     
-            if($data){
-                Storage::disk('public')->delete($dataPath);
+            if($imagePath){
+                foreach($imagePath as $path){
+                    Storage::disk('public')->delete($path);
+                }
             }
     
             $event->update([
-                'event_image' => $imagePath,
+                'event_image' => json_encode($imagePath),
                 'nama' => $request->nama,
                 'tags' => $request->tags,
                 'tanggal_mulai' => $request->tanggal_mulai,

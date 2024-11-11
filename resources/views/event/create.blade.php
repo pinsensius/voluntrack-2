@@ -18,32 +18,27 @@
                         
                             @csrf
 
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Users</label>
-                                <select class="form-select @error('host') is-invalid @enderror" name="host">
-                                    @foreach ( $users as $user )
-                                        <option value="{{$user->id}}">{{$user->id}}</option>
-                                    @endforeach
-                                  </select>
-                            
-                                <!-- error message untuk title -->
-                                @error('host')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                            <input type="text" name="host" value="{{auth()->id()}}" hidden>
 
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">Gambar Event</label>
-                                <input type="file" class="form-control @error('event_image') is-invalid @enderror" name="event_image">
+                                <input type="file" class="form-control @error('event_image.*') is-invalid @enderror" name="event_image[]" multiple>
                             
-                                <!-- error message untuk image -->
-                                @error('event_image')
+                                @if($errors->has('event_image'))
                                     <div class="alert alert-danger mt-2">
-                                        {{ $message }}
+                                        {{ $errors->first('event_image') }}
                                     </div>
-                                @enderror
+                                @endif
+                            
+                                @if($errors->has('event_image.*'))
+                                    @foreach ($errors->get('event_image.*') as $messages)
+                                        @foreach ($messages as $message)
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
+                                            </div>
+                                        @endforeach
+                                    @endforeach
+                                @endif
                             </div>
 
                             <div class="form-group mb-3">

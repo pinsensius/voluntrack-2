@@ -14,7 +14,10 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
-                        <img src="{{ asset('/storage/'.$event->event_image) }}" class="rounded" style="width: 100%">
+                        @foreach (json_decode($event->event_image) as $image)
+                            <img src="{{ asset('storage/' . $image) }}" class="rounded" alt="Event Image" style="width: 100%">
+                        @endforeach
+                        
                     </div>
                 </div>
             </div>

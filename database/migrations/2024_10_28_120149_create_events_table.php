@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('requirement');
             $table->smallInteger('total_volunteer')->default(0);
             $table->integer('target_donasi')->default(0);
-            $table->string('event_image');
+            $table->json('event_image');
             $table->timestamps();
 
             $table->foreign('host')->references('id')->on('users')->onDelete("cascade");

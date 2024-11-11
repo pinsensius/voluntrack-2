@@ -41,7 +41,7 @@
                                         <td class="text-center">
                                             <img src="{{ asset('/storage/'.$event->event_image) }}" class="rounded" style="width: 150px">
                                         </td>
-                                        <td>{{ $event->user->name}}</td>
+                                        <td>{{ $event->user->username}}</td>
                                         <td>{{ $event->nama }}</td>
                                         <td>{{ $event->tags }}</td>
                                         <td>{{ $event->tanggal_mulai }}</td>
