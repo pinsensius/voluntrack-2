@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RelawanController;
+use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -39,6 +42,11 @@ Route::middleware(['auth', 'role:relawan'])->group(function() {
 Route::middleware(['auth', 'role:admin|relawan'])->group(function() {
     Route::resource('/event', EventController::class);  // Both admin and relawan can access event
 });
+
+
+Route::resource('/comment', CommentController::class);
+
+Route::resource('/topic', TopicController::class);
 
 
 // Route::resource('/event', EventController::class);

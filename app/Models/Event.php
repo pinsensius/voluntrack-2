@@ -31,4 +31,5 @@ class Event extends Model
     public function relawan(): HasMany{
         return $this->hasMany(Relawan::class, 'event_id');
     }
+
 }

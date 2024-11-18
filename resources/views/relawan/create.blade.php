@@ -18,11 +18,11 @@
                         
                             @csrf
                             <input type="text" class="form-control" name="event_id" value="{{$event->id_event}}" hidden>
-                            <input type="text" class="form-control" name="user_id" value="1" hidden>
+                            <input type="text" class="form-control" name="user_id" value="{{auth()->id()}}" hidden>
 
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">Nama Lengkap</label>
-                                <input type="text" class="form-control @error('nama_lengkap') is-invalid @enderror" name="nama_lengkap" value="{{ old('nama_lengkap')  }}" placeholder="Masukkan Nama Lengkap">
+                                <input type="text" class="form-control @error('nama_lengkap') is-invalid @enderror" name="nama_lengkap" value="{{ old('nama_lengkap') ?? auth()->user()->username }}" placeholder="Masukkan Nama Lengkap">
                             
                                 <!-- error message untuk title -->
                                 @error('nama_lengkap')
@@ -34,7 +34,7 @@
 
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">Nomor Telepon</label>
-                                <input type="text" max="14" class="form-control @error('nomor_telepon') is-invalid @enderror" name="nomor_telepon" value="{{ old('nomor_telepon')}}" placeholder="Masukkan Nomor Telepon">
+                                <input type="text" max="14" class="form-control @error('nomor_telepon') is-invalid @enderror" name="nomor_telepon" value="{{ old('nomor_telepon') ?? auth()->user()->no_hp }}" placeholder="Masukkan Nomor Telepon">
                             
                                 @error('nomor_telepon')
                                     <div class="alert alert-danger mt-2">
@@ -58,7 +58,7 @@
 
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">NIK</label>
-                                <input type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" value="{{ old('nik')}}" placeholder="Masukkan NIK">
+                                <input type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" value="{{ old('nik') ?? auth()->user()->nik}}" placeholder="Masukkan NIK">
                             
                                 @error('nik')
                                     <div class="alert alert-danger mt-2">

@@ -1,104 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Data Products - SantriKoding.com</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body style="background: lightgray">
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Voluntrack Events') }}
+        </h2>
+    </x-slot>
 
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div>
-                    <h3 class="text-center my-4">Voluntrack</h3>
-                    <hr>
+    <div class="container mx-auto py-12 px-6">
+        <a href="{{ route('event.create') }}" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold mx-auto hover:bg-blue-500 transition duration-300 ml-4">
+            Buat Event Baru
+        </a>    
+        <!-- Search Bar -->
+        <div class="mb-8 flex justify-center">
+            <form action="{{ route('event.index') }}" method="GET" class="w-full max-w-md">
+                <div class="relative">
+                    <input type="text" name="search" placeholder="Search events..." class="w-full px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400" value="{{ request()->search }}">
+                    <button type="submit" class="absolute top-0 right-0 px-4 py-3 bg-blue-600 text-white rounded-lg">
+                        Search
+                    </button>
                 </div>
-                <div class="card border-0 shadow-sm rounded">
-                    <div class="card-body">
-                        <a href="{{ route('event.create') }}" class="btn btn-md btn-success mb-3">ADD PRODUCT</a>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Gambar Kegiatan</th>
-                                    <th scope="col">Host</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Tags</th>
-                                    <th scope="col">Tanggal Mulai</th>
-                                    <th scope="col">Tanggal Selesai</th>
-                                    <th scope="col">Lokasi</th>
-                                    <th scope="col">Detail Kegiatan</th>
-                                    <th scope="col">Kebutuhan Kegiatan</th>
-                                    <th scope="col">Target Donasi</th>
-                                    <th scope="col" style="width: 20%">ACTIONS</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($events as $event)
-                                    <tr>
-                                        <td class="text-center">
-                                            <img src="{{ asset('/storage/'.$event->event_image) }}" class="rounded" style="width: 150px">
-                                        </td>
-                                        <td>{{ $event->user->username}}</td>
-                                        <td>{{ $event->nama }}</td>
-                                        <td>{{ $event->tags }}</td>
-                                        <td>{{ $event->tanggal_mulai }}</td>
-                                        <td>{{ $event->tanggal_selesai }}</td>
-                                        <td>{{ $event->lokasi }}</td>
-                                        <td>{{ strip_tags($event->event_detail) }}</td>
-                                        <td>{{ strip_tags($event->requirement) }}</td>
-                                        <td>{{ $event->target_donasi }}</td>
-                                        <td class="text-center">
-                                            <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('event.destroy', $event->id_event) }}" method="POST">
-                                                <a href="{{ route('event.show', ['event' => $event->id_event]) }}">Lihat Event</a>
-                                                <a href="{{ route('event.edit', ['event' => $event->id_event]) }}" class="btn btn-sm btn-primary">EDIT</a>
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
-                                            </form>
-                                            
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <div class="alert alert-danger">
-                                        Data Products belum Tersedia.
-                                    </div>
-                                @endforelse
-                            </tbody>
-                        </table>
-                        {{-- {{ $event->links() }} --}}
+            </form>
+        </div>
+
+        <!-- Header Section -->
+        <div class="text-center mb-6">
+            <h3 class="text-3xl font-semibold text-gray-800 dark:text-white">Explore Our Events</h3>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Join the most exciting and impactful events happening in your community!</p>
+        </div>
+
+        <!-- Events Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach ($events as $event)
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+                <a href="{{ route('event.show', $event->id_event) }}">
+                    <!-- Event Image -->
+                    <img src="{{ asset('storage/' . json_decode($event->event_image)[0]) }}" alt="{{ $event->nama }}" class="w-full h-48 object-cover">
+                </a>
+                <div class="p-6">
+                    <!-- Event Title -->
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+                        <a href="{{ route('event.show', $event->id_event) }}" class="hover:text-blue-600 dark:hover:text-blue-400">{{ $event->nama }}</a>
+                    </h3>
+                    <!-- Event Host -->
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Hosted by: <span class="font-medium text-blue-500">{{ $event->user->username }}</span></p>
+                    <!-- Event Start and End Dates -->
+                    <div class="flex justify-between mt-4">
+                        <span class="text-gray-600 dark:text-gray-400 text-sm">Start: {{ \Carbon\Carbon::parse($event->tanggal_mulai)->format('d M Y') }}</span>
+                        <span class="text-gray-600 dark:text-gray-400 text-sm">End: {{ \Carbon\Carbon::parse($event->tanggal_selesai)->format('d M Y') }}</span>
                     </div>
+                    <!-- Event Location -->
+                    <p class="mt-4 text-gray-600 dark:text-gray-400 text-sm">Location: <span class="font-medium text-blue-500">{{ $event->lokasi }}</span></p>
+                    <!-- Event Description (Limited) -->
+                    <p class="mt-4 text-gray-600 dark:text-gray-400 text-sm">{{ Str::limit(strip_tags($event->event_detail), 100) }}</p>
+
+                    <!-- Event Actions -->
+
+                    @if (auth()->id() === $event->host)
+                        <div class="flex justify-between items-center mt-6">
+                        <a href="{{ route('event.show', $event->id_event) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-500">View Details</a>
+                        <div class="flex space-x-3">
+                            <a href="{{ route('event.edit', $event->id_event) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-500">Edit</a>
+                            <form action="{{ route('event.destroy', $event->id_event) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-500">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    @endif
+                    
                 </div>
             </div>
+            @endforeach
         </div>
+
+        
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-        //message with sweetalert
-        @if(session('success'))
-            Swal.fire({
-                icon: "success",
-                title: "BERHASIL",
-                text: "{{ session('success') }}",
-                showConfirmButton: false,
-                timer: 2000
-            });
-        @elseif(session('error'))
-            Swal.fire({
-                icon: "error",
-                title: "GAGAL!",
-                text: "{{ session('error') }}",
-                showConfirmButton: false,
-                timer: 2000
-            });
-        @endif
-
-    </script>
-
-</body>
-</html>
+</x-app-layout>

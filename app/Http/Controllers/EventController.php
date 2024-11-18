@@ -14,9 +14,15 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::with('user')->get();
+        $search = $request->input('search');
+
+        if($search){
+            $events = Event::where('nama','like','%'. $search. '%')->orWhere('tags','like','%'. $search. '%')->orWhere('lokasi','like','%'. $search. '%')->orWhere('event_detail','like','%'. $search. '%')->get();
+        }else{
+            $events = Event::with('user')->get();
+        }
 
         return view('event.index', compact('events'));
     }
@@ -114,19 +120,20 @@ class EventController extends Controller
 
         if($request->hasFile('event_image')){
 
-            $imagePath = [];
-
-            if( $request->hasFile('event_image')){
-                foreach($request->file('event_image') as $image){
-                    $imagePath[] = $image->store('event', 'public');
+            if($event->event_image) {
+                $oldImages = json_decode($event->event_image, true);
+                foreach($oldImages as $oldImage) {
+                    Storage::disk('public')->delete($oldImage);
                 }
+            }   
+
+            $imagePath = [];
+            
+            foreach($request->file('event_image') as $image){
+                $imagePath[] = $image->store('event', 'public');
             }
     
-            if($imagePath){
-                foreach($imagePath as $path){
-                    Storage::disk('public')->delete($path);
-                }
-            }
+            
     
             $event->update([
                 'event_image' => json_encode($imagePath),
@@ -160,14 +167,14 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {   
-        $data = $event;
-        $dataPath = $data->event_image;
-
-        if($data){
-            Storage::disk('public')->delete($dataPath);
+        if($event->event_image) {
+            $imagePaths = json_decode($event->event_image, true);
+            foreach($imagePaths as $path) {
+                Storage::disk('public')->delete($path);
+            }
         }
-
-        $data->delete();
+        
+        $event->delete();
 
         return redirect()->back()->with('success', 'Data berhasil dihapus');
 
