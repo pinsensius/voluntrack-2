@@ -11,6 +11,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/landing', function () {
+    return view('landing');
+})->name('landing');
+
+Route::get('/about-us', function () {
+    return view('aboutUs');
+})->name('aboutUs');
+
+Route::get('/loginPage', function () {
+    return view('loginPage');
+})->name('loginPage');
+
+Route::get('/registerPage', function () {
+    return view('registerPage');
+})->name('registerPage');
+
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -22,21 +40,21 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Routes
-Route::middleware(['auth', 'role:admin'])->group(function() {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
     Route::resource('/relawan', RelawanController::class);
     // Route::resource('/event', EventController::class);  // Admin can access event
 });
 
 // Relawan Routes
-Route::middleware(['auth', 'role:relawan'])->group(function() {
+Route::middleware(['auth', 'role:relawan'])->group(function () {
     Route::get('/home', [UserController::class, 'dashboard']);
     Route::resource('/relawan', RelawanController::class);
     Route::get('/relawan/daftar/{event}', [RelawanController::class, 'daftar'])->name('relawan.daftar');
     // Route::resource('/event', EventController::class);  // Relawan can also access event
 });
 
-Route::middleware(['auth', 'role:admin|relawan'])->group(function() {
+Route::middleware(['auth', 'role:admin|relawan'])->group(function () {
     Route::resource('/event', EventController::class);  // Both admin and relawan can access event
 });
 
@@ -44,4 +62,4 @@ Route::middleware(['auth', 'role:admin|relawan'])->group(function() {
 // Route::resource('/event', EventController::class);
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
