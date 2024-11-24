@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
+<link rel="stylesheet" href="{{ asset('css/font.css') }}">
+
 <nav>
     <div class="row navbar pt-3 pb-3">
         <div class="col">
