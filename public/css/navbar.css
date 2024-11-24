@@ -9,6 +9,11 @@ main {
 
 .navbar .judul h5 {
     font-family: 'jakartaSansBold';
+    color: black;
+}
+
+.navbar .judul a {
+    text-decoration: none;
 }
 
 .navbar>* {

@@ -5,8 +5,10 @@
     <div class="row navbar pt-3 pb-3">
         <div class="col">
             <div class="judul d-flex pt-2 pb-2 align-items-center">
-                <img src="{{ asset('icon/1.svg') }}" alt="icon">
-                <h5>Voluntrack.</h5>
+                <a href="{{ route('landing') }}" class="d-flex align-items-center">
+                    <img src="{{ asset('icon/1.svg') }}" alt="icon">
+                    <h5>Voluntrack.</h5>
+                </a>
             </div>
         </div>
         <div class="col-lg-8 d-flex justify-content-center">
@@ -15,9 +17,7 @@
                     <li><a href="#page1">Beranda</a></li>
                     <li><a href="#page5">Tentang Kami</a></li>
                     <li><a href="#page2">Kategori</a></li>
-                    <li><a href="#page3">Acara</a></li>
-                    <li><a href="#page4">Berita</a></li>
-                    <li><a href="">Relawan</a></li> <!-- blm berfungsi-->
+                    <li><a href="#page3">Kegiatan</a></li>
                 </ul>
             </div>
         </div>

@@ -224,6 +224,13 @@ main {
     font-family: 'jakartaSansBold';
 }
 
+#page2 .cText2 p a,
+#page3 .cText2 p a {
+    text-decoration: none;
+    color: #51A433;
+    font-family: 'jakartaSansSemiBold';
+}
+
 
 
 #page2 .category > * {
@@ -433,6 +440,12 @@ main {
     color: black;
     border: none;
     border-radius: 10px;
+}
+
+#page5 .right-text button a {
+    text-decoration: none;
+    font-family: 'jakartaSansSemiBold';
+    color: black;
 }
 
 /* Footer */

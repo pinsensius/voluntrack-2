@@ -7,6 +7,7 @@
     <title>Event Detail
     </title>
     <link rel="stylesheet" href="{{ asset('css/eventDetail.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/font.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -45,8 +46,8 @@
                             <div class="progress-bar" role="progressbar" aria-valuenow="$progress_event" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
-                    <button class="donateButton">Donasi Sekarang</button>
-                    <button class="mt-0 mb-0 button2 joinRelawan">Daftar Relawan</button>
+                    <button class="donateButton"><a href="{{route('paygate') }}">Donasi Sekarang</a></button>
+                    <button class="mt-0 mb-0 button2 joinRelawan"><a href="{{ route('registRelawan') }}">Daftar Relawan</a></button>
 
                     <form action="../Form Regist Join Event/join-event.php" method="post" class="daftarRelawan">
                         <input type="hidden" name="event_id" value="$eventId">

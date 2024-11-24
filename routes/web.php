@@ -27,6 +27,42 @@ Route::get('/registerPage', function () {
     return view('registerPage');
 })->name('registerPage');
 
+Route::get('/profileUser', function () {
+    return view('profileUser');
+})->name('profileUser');
+
+Route::get('/userInfo', function () {
+    return view('userInfo');
+})->name('userInfo');
+
+Route::get('/category', function () {
+    return view('category');
+})->name('category');
+
+Route::get('/listEvent', function () {
+    return view('listEvent');
+})->name('listEvent');
+
+Route::get('/eventDetail', function () {
+    return view('eventDetail');
+})->name('eventDetail');
+
+Route::get('/registEvent', function () {
+    return view('registEvent');
+})->name('registEvent');
+
+Route::get('/paygate', function () {
+    return view('paygate');
+})->name('paygate');
+
+Route::get('/createEvent', function () {
+    return view('createEvent');
+})->name('createEvent');
+
+Route::get('/registRelawan', function () {
+    return view('registRelawan');
+})->name('registRelawan');
+
 
 
 Route::get('/dashboard', function () {
