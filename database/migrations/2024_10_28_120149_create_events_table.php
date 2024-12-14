@@ -18,13 +18,16 @@ return new class extends Migration
             $table->string('nama', 255);
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
-            $table->string('lokasi', 255);
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
+            $table->string('alamat');
             $table->tinyInteger('progress_event')->default(0);
             $table->text('event_detail');
             $table->text('requirement');
             $table->smallInteger('total_volunteer')->default(0);
             $table->integer('target_donasi')->default(0);
             $table->json('event_image');
+            $table->enum('status', ['approved', 'pending', 'rejected'])->default('pending');
             $table->timestamps();
 
             $table->foreign('host')->references('id')->on('users')->onDelete("cascade");

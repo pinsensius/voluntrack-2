@@ -65,4 +65,13 @@ class User extends Authenticatable
     public function comment():HasMany{
         return $this->hasMany(Comment::class);
     }
+
+    public function donatur():HasMany{
+        return $this->hasMany(Donasi::class, 'donatur');
+    }
+
+    public function isHost()
+    {
+        return $this->role === 'host'; 
+    }
 }

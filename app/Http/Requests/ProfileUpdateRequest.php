@@ -25,7 +25,7 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            'alamat' => ['string', 'min:5', 'regex:/^[A-Za-z0-9\s,\/\-]+$/'],
+            'alamat' => ['string', 'min:5', 'regex:/^[A-Za-z0-9\s,\/\.\-#\(\):]+$/'],
             'no_hp' => ['string', 'min:10','max:12', 'regex:/^[0-9\-]+$/'],
             'nik' => ['string', 'size:16', 'regex:/^[0-9]+$/'],
             'profile' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],

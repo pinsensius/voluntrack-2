@@ -18,10 +18,12 @@ class Event extends Model
         'nama',
         'tanggal_mulai',
         'tanggal_selesai',
-        'lokasi',
+        'latitude', 'longitude',
         'event_detail',
         'requirement',
-        'target_donasi'
+        'target_donasi',
+        'alamat',
+        'status'
     ];
 
     public function user(): BelongsTo{
@@ -31,5 +33,11 @@ class Event extends Model
     public function relawan(): HasMany{
         return $this->hasMany(Relawan::class, 'event_id');
     }
+
+    public function donatur():HasMany{
+        return $this->hasMany(Donasi::class, 'event_id');
+    }
+
+    
 
 }

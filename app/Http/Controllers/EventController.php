@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Donasi;
 use App\Models\Event;
 use App\Models\Relawan;
 use App\Models\User;
@@ -19,12 +20,25 @@ class EventController extends Controller
         $search = $request->input('search');
 
         if($search){
-            $events = Event::where('nama','like','%'. $search. '%')->orWhere('tags','like','%'. $search. '%')->orWhere('lokasi','like','%'. $search. '%')->orWhere('event_detail','like','%'. $search. '%')->get();
+            $events = Event::where('nama','like','%'. $search. '%')->orWhere('tags','like','%'. $search. '%')->orWhere('alamat','like','%'. $search. '%')->orWhere('event_detail','like','%'. $search. '%')->get();
         }else{
             $events = Event::with('user')->get();
         }
 
+        foreach($events as $event){
+            $totalDonasi = Donasi::where('event_id', $event->id_event)->sum("amount");
+            $persentaseDonasi = $event->target_donasi > 0 ? round(($totalDonasi / $event->target_donasi) * 100, 2) : 0;
+
+            $event->progress_event = $persentaseDonasi;
+
+            $event->save();
+
+            
+        }
+
         return view('event.index', compact('events'));
+
+       
     }
 
     /**
@@ -47,12 +61,14 @@ class EventController extends Controller
             'host' => 'required|exists:users,id',
             'nama' => 'required|min:5|regex:/^[A-Za-z0-9\s]+$/|string',
             'tags' => 'required|in:lingkungan,kemanusiaan,olahraga|string',
-            'tanggal_mulai' => 'required|date|after:today',
+            'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date',
-            'lokasi' => 'required|string|min:3|max:255|regex:/^[A-Za-z0-9\s,.-]+$/',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
             'event_detail' => 'required|string|min:10|max:2000',
             'requirement' => 'required|string|min:10|max:2000',
-            'target_donasi' => 'required|numeric'
+            'target_donasi' => 'required|numeric',
+            'alamat' => 'required|string'
         ]);
 
         $imagePath = [];
@@ -70,10 +86,12 @@ class EventController extends Controller
             'tags' => $request->tags,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
-            'lokasi' => $request->lokasi,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
             'event_detail' => $request->event_detail,
             'requirement' => $request->requirement,
-            'target_donasi' => $request->target_donasi
+            'target_donasi' => $request->target_donasi,
+            'alamat' => $request->alamat
         ]);
 
         return redirect()->route('event.index')->with(['success' => 'Data Berhasil Disimpan!']);
@@ -113,7 +131,7 @@ class EventController extends Controller
             'lokasi' => 'required|string|min:3|max:255|regex:/^[A-Za-z0-9\s,.-]+$/',
             'event_detail' => 'required|string|min:10|max:2000',
             'requirement' => 'required|string|min:10|max:2000',
-            'target_donasi' => 'required|numeric'
+            'target_donasi' => 'required'
         ]);
 
         
